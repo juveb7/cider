@@ -66,7 +66,7 @@ class CiderScorer(object):
         self.df_mode = df_mode
         self.ref_len = None
         if self.df_mode != "corpus":
-            pkl_file = pickle.load(open(df_mode,'rb'))
+            pkl_file = pickle.load(open(os.path.join('data', df_mode + '.p'), 'rb'), encoding='utf-8')
             self.ref_len = np.log(float(pkl_file['ref_len']))
             self.document_frequency = pkl_file['document_frequency']
         self.cook_append(test, refs)
@@ -127,7 +127,10 @@ class CiderScorer(object):
             norm = [0.0 for _ in range(self.n)]
             for (ngram,term_freq) in cnts.items():
                 # give word count 1 if it doesn't appear in reference corpus
+                print(type(self.document_frequency))
+                print(self.document_frequency)
                 df = np.log(max(1.0, self.document_frequency[ngram]))
+                
                 # ngram index
                 n = len(ngram)-1
                 # tf (term_freq) * idf (precomputed idf) for n-grams
