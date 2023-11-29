@@ -2,7 +2,7 @@
 # Tsung-Yi Lin <tl483@cornell.edu>
 # Ramakrishna Vedantam <vrama91@vt.edu>
 
-import copy
+import copy, sys
 from collections import defaultdict
 import numpy as np
 import pdb
@@ -57,7 +57,7 @@ class CiderScorer(object):
         new.crefs = copy.copy(self.crefs)
         return new
 
-    def __init__(self, df_mode="corpus", test=None, refs=None, n=4, sigma=6.0):
+    def __init__(self, df_mode="coco-val", test=None, refs=None, n=4, sigma=6.0):
         ''' singular instance '''
         self.n = n
         self.sigma = sigma
@@ -66,10 +66,11 @@ class CiderScorer(object):
         self.df_mode = df_mode
         self.ref_len = None
         if self.df_mode != "corpus":
-            pkl_file = pickle.load(open(os.path.join('data', df_mode + '.p'), 'rb'), encoding='utf-8')
-            self.ref_len = np.log(float(pkl_file['ref_len']))
-            self.document_frequency = pkl_file['document_frequency']
+            self.document_frequency = pickle.load(open(os.path.join('data', df_mode + '.p'), 'rb'), encoding='utf-8')
+            # self.ref_len = np.log(float(pkl_file['ref_len']))
+            # self.document_frequency = pkl_file['document_frequency']
         self.cook_append(test, refs)
+        self.ref_len = None
     
     def clear(self):
         self.crefs = []
@@ -127,8 +128,6 @@ class CiderScorer(object):
             norm = [0.0 for _ in range(self.n)]
             for (ngram,term_freq) in cnts.items():
                 # give word count 1 if it doesn't appear in reference corpus
-                print(type(self.document_frequency))
-                print(self.document_frequency)
                 df = np.log(max(1.0, self.document_frequency[ngram]))
                 
                 # ngram index
@@ -174,9 +173,9 @@ class CiderScorer(object):
         # compute log reference length
         if self.df_mode == "corpus":
             self.ref_len = np.log(float(len(self.crefs)))
-        #elif self.df_mode == "coco-val":
+        elif self.df_mode == "coco-val":
             # if coco option selected, use length of coco-val set
-        #    self.ref_len = np.log(float(40504))
+           self.ref_len = np.log(float(40504))
 
         scores = []
         for test, refs in zip(self.ctest, self.crefs):
