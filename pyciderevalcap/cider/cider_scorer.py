@@ -68,7 +68,9 @@ class CiderScorer(object):
         self.ctest = []
         self.df_mode = df_mode
         if self.df_mode != "corpus":
-            self.document_frequency = pickle.load(open(os.path.join('data', df_mode + '.p'), 'rb'), encoding='utf-8')
+            # self.document_frequency = pickle.load(open(os.path.join('data', df_mode + '.p'), 'rb'), encoding='utf-8')
+            # self.document_frequency = pickle.load(open(os.path.join('cider', 'data', df_mode + '.p'), 'rb'), encoding='utf-8')
+            self.document_frequency = pickle.load(open("/home/918573232/code/youdescribe-video-captioner/cider/data/coco-val.p", 'rb'), encoding='utf-8')
         self.cook_append(test, refs)
         self.ref_len = None
 
@@ -174,6 +176,26 @@ class CiderScorer(object):
         elif self.df_mode == "coco-val":
             # if coco option selected, use length of coco-val set
             self.ref_len = np.log(float(40504))
+            
+        #     delta = float(length_hyp - length_ref)
+        #     # measure consine similarity
+        #     val = np.array([0.0 for _ in range(self.n)])
+        #     for n in range(self.n):
+        #         # ngram
+        #         for (ngram,count) in vec_hyp[n].items():
+        #             # vrama91 : added clipping
+        #             val[n] += min(vec_hyp[n][ngram], vec_ref[n][ngram]) * vec_ref[n][ngram]
+
+        #         if (norm_hyp[n] != 0) and (norm_ref[n] != 0):
+        #             val[n] /= (norm_hyp[n]*norm_ref[n])
+
+        #         assert(not math.isnan(val[n]))
+        #         # vrama91: added a length based gaussian penalty
+        #         val[n] *= np.e**(-(delta**2)/(2*self.sigma**2))
+        #     return val
+
+        # # compute log reference length
+        # self.ref_len = np.log(float(len(self.crefs)))
 
         scores = []
         for test, refs in zip(self.ctest, self.crefs):

@@ -66,7 +66,10 @@ class CiderScorer(object):
         self.df_mode = df_mode
         self.ref_len = None
         if self.df_mode != "corpus":
-            self.document_frequency = pickle.load(open(os.path.join('data', df_mode + '.p'), 'rb'), encoding='utf-8')
+            self.document_frequency = pickle.load(open("/home/918573232/code/youdescribe-video-captioner/cider/data/coco-val.p", 'rb'), encoding='utf-8')
+
+            # self.document_frequency = pickle.load(open(os.path.join('cider', 'data', df_mode + '.p'), 'rb'), encoding='utf-8')
+            # self.document_frequency = pickle.load(open(os.path.join('data', df_mode + '.p'), 'rb'), encoding='utf-8')
             # self.ref_len = np.log(float(pkl_file['ref_len']))
             # self.document_frequency = pkl_file['document_frequency']
         self.cook_append(test, refs)
@@ -169,14 +172,32 @@ class CiderScorer(object):
                 # vrama91: added a length based gaussian penalty
                 val[n] *= np.e**(-(delta**2)/(2*self.sigma**2))
             return val
-
-        # compute log reference length
+        
+            # compute log reference length
         if self.df_mode == "corpus":
             self.ref_len = np.log(float(len(self.crefs)))
         elif self.df_mode == "coco-val":
             # if coco option selected, use length of coco-val set
            self.ref_len = np.log(float(40504))
+        
 
+            # delta = float(length_hyp - length_ref)
+            # # measure consine similarity
+            # val = np.array([0.0 for _ in range(self.n)])
+            # for n in range(self.n):
+            #     # ngram
+            #     for (ngram,count) in vec_hyp[n].items():
+            #         # vrama91 : added clipping
+            #         val[n] += min(vec_hyp[n][ngram], vec_ref[n][ngram]) * vec_ref[n][ngram]
+
+            #     if (norm_hyp[n] != 0) and (norm_ref[n] != 0):
+            #         val[n] /= (norm_hyp[n]*norm_ref[n])
+
+            #     assert(not math.isnan(val[n]))
+            #     # vrama91: added a length based gaussian penalty
+            #     val[n] *= np.e**(-(delta**2)/(2*self.sigma**2))
+            # return val
+        # self.ref_len = np.log(float(len(self.crefs)))
         scores = []
         for test, refs in zip(self.ctest, self.crefs):
             # compute vector for test captions

@@ -34,10 +34,25 @@ class PTBTokenizer:
         # ======================================================
         # prepare data for PTB Tokenizer
         # ======================================================
-
         if self.source == 'gts':
             image_id = [k for k, v in captions_for_image.items() for _ in range(len(v))]
+
+            # print(f"DEBUG: captions_for_image: {captions_for_image}")
+            # image_id = []
+            # for img_id in captions_for_image:
+            #     print(f"DEBUG: img_id: {img_id}")
+            #     image_id.append(img_id)
+
             sentences = '\n'.join([c['caption'].replace('\n', ' ') for k, v in captions_for_image.items() for c in v])
+            # sentences = ""
+            # for caption_dict in captions_for_image:
+            #     # Replace newlines in each caption with spaces
+            #     caption_cleaned = caption_dict['caption'].replace('\n', ' ')
+            #     # Append the cleaned caption to the sentences string
+            #     if sentences:  # If sentences is not empty, add a newline before appending
+            #         sentences += "\n" + caption_cleaned
+            #     else:
+            #         sentences = caption_cleaned
             final_tokenized_captions_for_image = {}
 
         elif self.source == 'res':

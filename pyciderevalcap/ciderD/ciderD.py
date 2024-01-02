@@ -35,7 +35,7 @@ class CiderD:
         # clear all the previous hypos and refs
         self.cider_scorer.clear()
         for res_id in res:
-
+            # print(f"gts[res_id]: {gts[res_id]}")
             hypo = res_id['caption']
             ref = gts[res_id['image_id']]
 
