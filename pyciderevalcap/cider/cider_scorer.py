@@ -69,7 +69,8 @@ class CiderScorer(object):
         self.df_mode = df_mode
         if self.df_mode != "corpus":
             # self.document_frequency = pickle.load(open(os.path.join('data', df_mode + '.p'), 'r'))
-            self.document_frequency = pickle.load(open(os.path.join('../data', df_mode + '.p'), 'rb'), encoding='utf-8')
+            print(os.getcwd())
+            self.document_frequency = pickle.load(open(os.path.join('cider/data', df_mode + '.p'), 'rb'), encoding='utf-8')
             # self.document_frequency = pickle.load(open(os.path.join('cider', 'data', df_mode + '.p'), 'rb'), encoding='utf-8')
             # self.document_frequency = pickle.load(open("/home/918573232/code/youdescribe-video-captioner/cider/data/coco-val.p", 'rb'), encoding='utf-8')
         self.cook_append(test, refs)
